@@ -48,7 +48,7 @@ def detail_esp(request, pk=None):
         context['esp_detail'] = esp_instance
     else:
         return redirect("home")
-    return render(request, "esps/detail-esp.html", context)
+    return render(request, "rfid/detail-esp.html", context)
 
 @login_required 
 def update_esp(request, pk=None):
@@ -69,7 +69,7 @@ def update_esp(request, pk=None):
         context['form'] = form
         return redirect(esp_instance.get_absolute_url)
  
-    return render(request, "esps/create-esp.html", context)
+    return render(request, "rfid/create-esp.html", context)
         
    
 @login_required  
