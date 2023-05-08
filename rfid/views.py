@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
-
+from django.contrib.auth.decorators import login_required
 from .models import Esp32, RFID
 
 # Create your views here.
