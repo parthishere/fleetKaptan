@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
+
+from .models import Esp32, RFID
+
 # Create your views here.
 def home(request, esp_name):
     

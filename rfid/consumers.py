@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models import Count, F, Value
 from channels.db import database_sync_to_async
 # from main_app.models import Chat, Thread
-
+from .models import Esp32, RFID
 
 class WriteToRFID(AsyncWebsocketConsumer):
     """
