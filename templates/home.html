@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+  </head>
+  <body>
+    <form id="nameForm" name="nameForm">
+      <input type="text" name="name" id="name" placeholder="enter Your name" />
+      <input type="submit" id="submitName" />
+    </form>
+
+    <form id="chatForm">
+      <input type="text" name="text" id="text" />
+      <input type="submit" id="submitText" />
+    </form>
+
+    <div id="history"></div>
+    {{ esp_name | json_script:"esp_name"}}
+    <script>
+      const groupName = JSON.parse(
+        document.getElementById("esp_name").textContent
+      );
+
+      var ws = new WebSocket("ws://" + window.location.host + "/ws/rfid/"+groupName+"/write");
+
+      var submitName = document.getElementById("submitName");
+      //
+      var submit = document.getElementById("submitText");
+
+      chatForm.style.display = "none";
+      document.getElementById("name").focus();
+
+      ws.onopen = function () {
+        console.log("connected");
+        ws.send("conection recived");
+      };
+
+      ws.onclose = function () {
+        console.log("close");
+      };
+
+      ws.onmessage = function (event) {
+        console.log("recieved", event["data"]);
+
+        console.log(event["data"]);
+        var data = JSON.parse(event["data"]);
+        console.log(data["message"]);
+        document.getElementById("history").innerHTML +=
+          data["message"] + "</br>";
+      };
+
+      submitName.addEventListener("click", function (event) {
+        event.preventDefault();
+        var name = document.getElementById("name").value;
+
+        if (name == "") {
+          return false;
+        } else {
+          ws.send(JSON.stringify({ name: name }));
+
+          nameForm.style.display = "none";
+          chatForm.style.display = "block";
+          document.getElementById("text").focus();
+        }
+      });
+
+      submit.addEventListener("click", function (event) {
+        event.preventDefault();
+        var chat = document.getElementById("text").value;
+
+        if (chat == "") {
+          return false;
+        } else {
+          ws.send(JSON.stringify({ message: chat }));
+
+          document.getElementById("text").value = "";
+        }
+      });
+    </script>
+  </body>
+</html>
