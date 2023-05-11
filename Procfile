@@ -1,1 +1,1 @@
-web: gunicorn fleetKaptan.wsgi --bind=0.0.0.0:$PORT 
+web: gunicorn fleetKaptan.wsgi -b 0.0.0.0:$PORT 
