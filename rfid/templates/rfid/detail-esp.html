@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<br>
+<div class="container md-6 xl-12 sm-3" >
+    <a href="{% url "rfid:delete-esp" esp_name=esp_detail.unique_id %}"> <button class="btn btn-danger">Delete ESP</button></a>
+</div>
+<div class="container fluid">
+<b>Unique ID of Event : </b>{{ esp_detail.unique_id }}<br>
+<b>Created by : </b>{{ esp_detail.created_by }}<br>
+
+
+<b>RFID list :</b><br>
+
+</div>
+<div class='container-fluid'>
+    <table class="table">
+        <thead class="thead-dark">
+
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">esp uquid</th>
+            <th scope="col">Unique Id</th>
+            <th scope="col">value</th>
+            <th scope="col">timestamp</th>
+
+            <th scppe="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in esp_detail.rfids.all %}
+          <tr>
+            <th scope="row">{{i.pk}}</th>
+            <td>{{i.esp.unique_id}}</td>
+            <td>{{i.uid}}</td>
+            <td>{{i.value}}</td>
+            <td>{{i.timestamp}}</td>
+
+            <td><a href="{% url 'rfid:delete-rfid' unique_id=esp_detail.unique_id pk=i.pk %}"><i class="fa fa-remove" style="font-size:36px;color:red"></i></td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+{% endblock %}

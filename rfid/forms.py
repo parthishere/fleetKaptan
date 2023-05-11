@@ -5,4 +5,4 @@ from .models import Esp32
 class EspForm(forms.ModelForm):
     class Meta:
         model = Esp32
-        fields = ()
+        fields = ("__all__")

@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+    path('accounts/', include('allauth.urls')),
     path('schema/', get_schema_view(
         title="API",
         description="API for the Attendace App",
@@ -33,7 +33,7 @@ urlpatterns = [
     ), name="social-docs"),
     
     # path('api/auth/', include('dj_rest_auth.urls')),
-    path("rfid/", include("rfid.urls")),
+    path("rfid/", include("rfid.urls", namespace="rfid")),
     path("api/rfid/", include("rfid.api.urls")),
     # path("api//", include("recognizer.api.urls")),
 ]

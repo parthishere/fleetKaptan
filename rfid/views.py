@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
 from django.contrib.auth.decorators import login_required
 from .models import Esp32, RFID
@@ -6,7 +7,6 @@ from .forms import EspForm
 
 # Create your views here.
 def home(request, esp_name):
-    
     return render(request, "home.html", {"esp_name":esp_name})
 
 @login_required
@@ -24,7 +24,6 @@ def create_esp(request):
     
     user = request.user
     esps = Esp32.objects.filter(user=user)
-    esp_count = esps.count()
     
     form = EspForm(request.POST or None)
     
@@ -36,17 +35,18 @@ def create_esp(request):
         esp_instance.created_by = user
         esp_instance.save()
         context['form'] = form
-        return redirect(esp_instance.get_absolute_url)
+        return redirect("rfid:esp-list")
         
-    return render(request, "rfid/create-esp.html", context)
+    return render(request, "rfid/esp-form.html", context)
 
 
 @login_required 
-def detail_esp(request, pk=None):
+def detail_esp(request, esp_name=None):
     context = {}
-    esp_instance = Esp32.objects.select_related("user").prefetch_related("rfids").get(pk=pk, removed=False)
+    esp_instance = Esp32.objects.select_related("user").prefetch_related("rfids").get(unique_id=esp_name)
     if request.user == esp_instance.user:
         context['esp_detail'] = esp_instance
+        
     else:
         return redirect("home")
     return render(request, "rfid/detail-esp.html", context)
@@ -68,19 +68,30 @@ def update_esp(request, pk=None):
     
         esp_instance.save()
         context['form'] = form
-        return redirect(esp_instance.get_absolute_url)
+        return redirect(reverse(esp_instance.get_absolute_url))
  
-    return render(request, "rfid/create-esp.html", context)
+    return render(request, "rfid/esp-form.html", context)
         
    
 @login_required  
-def delete_esp(request, pk=None):
+def delete_esp(request, esp_name=None):
     user = request.user
-    esp_instance = Esp32.objects.get(pk=pk)
+    esp_instance = Esp32.objects.get(unique_id=esp_name)
   
-    if user == esp_instance.created_by:
+    if user == esp_instance.user:
         esp_instance.delete()
-        esp_instance.save()
-        return redirect("esps:list")
+        return redirect("rfid:esp-list")
     
-    return redirect(esp_instance.get_absolute_url)
+    return redirect(reverse(esp_instance.get_absolute_url))
+
+@login_required  
+def delete_rfid(request, unique_id=None, pk=None):
+    user = request.user
+    esp_instance = Esp32.objects.get(unique_id=unique_id)
+    rfid_instance = RFID.objects.get(pk=pk)
+  
+    if user == esp_instance.user and rfid_instance in esp_instance.rfids.all():
+        rfid_instance.delete()
+        return redirect("rfid:esp-list")
+    
+    return redirect(reverse(esp_instance.get_absolute_url))

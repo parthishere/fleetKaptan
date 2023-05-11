@@ -1,0 +1,23 @@
+{% extends "base.html" %} 
+{% block body_block %}
+<br>
+
+<div class="container text-center">
+  <div class="row">
+    {% for e in esp_list %}
+    <div class="col">
+      <div class="card" >
+        <div class="card-body">
+          <h5 class="card-title">UQID: {{e.unique_id}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{e.timestamp}}</h6>
+          
+          <a href="{{e.get_absolute_url}}" class="card-link">Scanned RFIDs</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

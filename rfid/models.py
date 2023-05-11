@@ -3,7 +3,7 @@ from datetime import timezone
 
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
-
+from django.urls import reverse
 
 import random
 import string
@@ -57,6 +57,10 @@ class Esp32(models.Model):
     def __str__(self):
         return f"esp {str(self.pk)}"
     
+    def get_absolute_url(self):
+        return reverse("rfid:detail-esp", kwargs={"esp_name": self.unique_id})
+    
+    
     
 class RFID(models.Model):
     esp = models.ForeignKey(Esp32, on_delete=models.CASCADE, related_name='rfids')
@@ -68,15 +72,23 @@ class RFID(models.Model):
     def __str__(self):
         return str(f"applience of {self.esp.unique_id} : {self.pk}")
     
+def esp_pre_save_receiver(sender, instance, *args, **kwargs):
+    if instance.unique_id == None or instance.unique_id == "" or instance.pk==None:
+        instance.unique_id = unique_id_generator_esp(instance)
+            
+
+pre_save.connect(esp_pre_save_receiver, sender=Esp32)
 
     
 def user_post_save_receiver(sender, instance, *args, **kwargs):
-    obj = Esp32.objects.get(user=instance)
-    if obj is None:
-        Esp32.objects.create(user=instance)
-    else:
-        pass
-
+    try:
+        obj = Esp32.objects.get(user=instance)
+        if obj is None:
+            Esp32.objects.create(user=instance)
+        else:
+            pass
+    except:
+         Esp32.objects.create(user=instance)
 post_save.connect(user_post_save_receiver, sender=User)
 
 
