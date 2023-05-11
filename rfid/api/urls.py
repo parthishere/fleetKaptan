@@ -9,7 +9,7 @@ urlpatterns = [
     path("<str:unique_id>", ESPRetriveUpdateDestroyAPIView.as_view(), name="detail-esp"),
     
     path("<str:unique_id>/<str:username>/write-to-rfid/", return_data_to_esp_view, name="list-rfid"),
-    path("<str:unique_id>/<str:username>/read-esp-scanned", get_posted_d8000ata_from_esp, name="detail-rfid"),
+    path("<str:unique_id>/<str:username>/read-esp-scanned", get_posted_data_from_esp, name="detail-rfid"),
 ]
     
     
