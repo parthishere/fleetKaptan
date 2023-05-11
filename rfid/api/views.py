@@ -39,8 +39,8 @@ class ESPRetriveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 @api_view(['GET'])
 def return_data_to_esp_view(request, unique_id, username):
     message = {}
-    # username = request.query_params.get('username')
-    # unique_id = request.query_params["uqid"]
+    username = request.query_params.get('username')
+    unique_id = request.query_params["uqid"]
     
     unique_id.replace(" ", "")
     uqid = ""
