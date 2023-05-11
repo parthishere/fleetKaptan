@@ -1,1 +1,1 @@
-web: gunicorn fleetKaptan.wsgi --log-level debug --bind=0.0.0.0:$PORT --capture-output 
+web: gunicorn fleetKaptan.wsgi --bind=0.0.0.0:$PORT 
