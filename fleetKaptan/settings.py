@@ -38,7 +38,9 @@ DEBUG = os.environ['DEBUG']
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://fleetkaptan.up.railway.app'
+]
 
 # Application definition
 
