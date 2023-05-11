@@ -8,8 +8,8 @@ urlpatterns = [
     path("esp-list", ESPListCreateAPI.as_view(), name="list-esp"),
     path("<str:unique_id>", ESPRetriveUpdateDestroyAPIView.as_view(), name="detail-esp"),
     
-    path("write-to-rfid/", return_data_to_esp_view, name="list-rfid"),
-    path("<str:unique_id>/read-esp-scanned", get_posted_data_from_esp, name="detail-rfid"),
+    path("<str:unique_id>/<str:username>/write-to-rfid/", return_data_to_esp_view, name="list-rfid"),
+    path("<str:unique_id>/<str:username>/read-esp-scanned", get_posted_data_from_esp, name="detail-rfid"),
 ]
     
     

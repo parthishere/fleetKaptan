@@ -37,21 +37,28 @@ class ESPRetriveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         
 
 @api_view(['GET'])
-def return_data_to_esp_view(request):
+def return_data_to_esp_view(request, unique_id, username):
     message = {}
-    username = request.query_params.get('username')
-    unique_id = request.query_params["uqid"]
+    # username = request.query_params.get('username')
+    # unique_id = request.query_params["uqid"]
     
     unique_id.replace(" ", "")
     uqid = ""
+    usrname=""
     for a in unique_id:
         if a == '\0' or a == "" or len(a) == 0:
             pass
         else:
             uqid += a
+            
+    for b in username:
+        if b == '\0' or b == "" or len(b) == 0:
+            pass
+        else:
+            usrname += b
 
     try:
-        esp = Esp32.objects.get(user__username=username, unique_id=uqid)
+        esp = Esp32.objects.get(user__username=usrname, unique_id=uqid)
         
         appliences = RFID.objects.filter(esp=esp).order_by("-id")
     except:
@@ -67,42 +74,48 @@ from django.views.decorators.csrf import csrf_exempt
 
 @api_view(['POST', 'PUT', 'PATCH'])
 @csrf_exempt
-def get_posted_data_from_esp(request):
+def get_posted_data_from_esp(request, unique_id, username):
     message = {}
-    appliences = None
+    rfid=None
     form = SaveForm(request.POST)
     form.is_valid()
     
-    unique_id = request.query_params.get('uqid').strip()
-    username = request.query_params.get('username').strip()
+    # unique_id = request.query_params.get('uqid').strip()
+    # username = request.query_params.get('username').strip()
     
     unique_id.replace(" ", "")
     uqid = ""
+    usrname=""
     for a in unique_id:
         if a == '\0' or a == "" or len(a) == 0:
             pass
         else:
             uqid += a
+            
+    for b in username:
+        if b == '\0' or b == "" or len(b) == 0:
+            pass
+        else:
+            usrname += b
     
     password = form.cleaned_data.get('password')
     D0 = form.cleaned_data.get('D0')
-    D1 = form.cleaned_data.get('D1')
-    D2 = form.cleaned_data.get('D2')
-    D3 = form.cleaned_data.get('D3')
-    D4 = form.cleaned_data.get('D4')
-    D5 = form.cleaned_data.get('D5')
-    A0 = form.cleaned_data.get('A0')
-    
+    data = form.cleaned_data.get('data')
+    print(password, D0, data, uqid, username)
     try:
-        esp = Esp32.objects.get(user__user__username=username, unique_id=uqid)
+        esp = Esp32.objects.get(user__username=username, unique_id=uqid)
+        print(esp)
+        rfid = RFID.objects.create(esp=esp, boolean_val=True if D0 else False, value=data)
+        # rfids = RFID.objects.filter(esp=esp).order_by("-id")
+        rfid = RFIDsSerializer(rfid).data
+        # print(rfids)
+    except Exception as e:
         
-        appliences = RFID.objects.filter(esp=esp).order_by("-id")
-        appliences = RFIDsSerializer(appliences, many=True).data
-    except:
+        print(e)
         message = {"error": "404", "data": "Object not found !"}
         return Response(message)
     
     
-    print(appliences)
-    return Response(appliences)
+    print(rfid)
+    return Response(rfid)
     
