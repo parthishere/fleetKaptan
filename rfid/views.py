@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
 from django.contrib.auth.decorators import login_required
 from .models import Esp32, RFID
-from .forms import EspForm
+from .forms import EspForm, RFIDForm
 
 # Create your views here.
 def home(request, esp_name):
@@ -44,9 +44,17 @@ def create_esp(request):
 def detail_esp(request, esp_name=None):
     context = {}
     esp_instance = Esp32.objects.select_related("user").prefetch_related("rfids").get(unique_id=esp_name)
+    form = RFIDForm(request.POST or None)
+    context["form"] = form
+    if request.POST and form.is_valid:
+        a = form.save(commit=False)
+        a.esp =esp_instance
+        a.boolean_value = False
+        a.save()
+        context["form"] = form
+        return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":esp_name}))
     if request.user == esp_instance.user:
-        context['esp_detail'] = esp_instance
-        
+        context['esp_detail'] = esp_instance  
     else:
         return redirect("home")
     return render(request, "rfid/detail-esp.html", context)
@@ -82,7 +90,7 @@ def delete_esp(request, esp_name=None):
         esp_instance.delete()
         return redirect("rfid:esp-list")
     
-    return redirect(reverse(esp_instance.get_absolute_url))
+    return redirect(reverse("rfid:esp-list"))
 
 @login_required  
 def delete_rfid(request, unique_id=None, pk=None):
@@ -94,4 +102,5 @@ def delete_rfid(request, unique_id=None, pk=None):
         rfid_instance.delete()
         return redirect("rfid:esp-list")
     
-    return redirect(reverse(esp_instance.get_absolute_url))
+    return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":unique_id}))
+

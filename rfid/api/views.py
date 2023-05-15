@@ -60,12 +60,12 @@ def return_data_to_esp_view(request, unique_id, username):
     try:
         esp = Esp32.objects.get(user__username=usrname, unique_id=uqid)
         
-        appliences = RFID.objects.filter(esp=esp).order_by("-id")
+        appliences = RFID.objects.filter(esp=esp).order_by("-id").first()
     except:
         message = {"error": "404", "data": "Object not found !"}
         return Response(message)
     
-    serializer = RFIDsSerializer(appliences, many=True)
+    serializer = RFIDsSerializer(appliences)
     print(Response(serializer.data))
     return Response(serializer.data)
 
