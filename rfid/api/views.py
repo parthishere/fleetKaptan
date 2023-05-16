@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import SaveForm
+from django.contrib.auth.decorators import login_required
 
 class ESPListCreateAPI(ListCreateAPIView):
     queryset = Esp32.objects.all()
@@ -37,10 +38,11 @@ class ESPRetriveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         
 
 @api_view(['GET'])
+@login_required
+@csrf_exempt
 def return_data_to_esp_view(request, unique_id, username):
     message = {}
-    username = request.query_params.get('username')
-    unique_id = request.query_params["uqid"]
+    
     
     unique_id.replace(" ", "")
     uqid = ""
