@@ -35,7 +35,8 @@ class ESPRetriveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         if self.request.user == instance.user:
             instance.delete()
-        
+            
+from django.views.decorators.csrf import csrf_exempt       
 
 @api_view(['GET'])
 @login_required
@@ -71,7 +72,7 @@ def return_data_to_esp_view(request, unique_id, username):
     print(Response(serializer.data))
     return Response(serializer.data)
 
-from django.views.decorators.csrf import csrf_exempt
+
 
 
 @api_view(['POST', 'PUT', 'PATCH'])
