@@ -104,11 +104,12 @@ def get_posted_data_from_esp(request, unique_id, username):
     password = form.cleaned_data.get('password')
     D0 = form.cleaned_data.get('D0')
     data = form.cleaned_data.get('data')
+    uid = form.cleaned_data.get('uid')
     print(password, D0, data, uqid, username)
     try:
         esp = Esp32.objects.get(user__username=username, unique_id=uqid)
         print(esp)
-        rfid = RFID.objects.create(esp=esp, boolean_val=True if D0 else False, value=data)
+        rfid = RFID.objects.create(esp=esp, boolean_val=True if D0 else False, value=data, uid=uid)
         # rfids = RFID.objects.filter(esp=esp).order_by("-id")
         rfid = RFIDsSerializer(rfid).data
         # print(rfids)
