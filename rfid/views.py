@@ -4,6 +4,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
 from django.contrib.auth.decorators import login_required
 from .models import Esp32, RFID
 from .forms import EspForm, RFIDForm
+from django.db.models import Q
 
 # Create your views here.
 def home(request, esp_name):
@@ -105,6 +106,14 @@ def delete_rfid(request, unique_id=None, pk=None):
     return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":unique_id}))
 
 
-def search_rfid(request, uniqe_id=None):
-    return render(request, "", {})
+@login_required
+def search_rfid(request, unique_id=None):
+    context = {}
+    if request.GET["q"]:
+        q = request.GET.get('q')
+        esp_obj = Esp32.objects.get(unique_id=unique_id)
+        qs = RFID.objects.filter(esp=esp_obj).filter(Q(timestamp__icontains=q) | Q(uid__icontains=q) |Q(value__icontains=q))
+        context["rfids"] = qs
+        context["esp_detail"] = esp_obj
+    return render(request, "rfid/search-rfid.html", context)
 

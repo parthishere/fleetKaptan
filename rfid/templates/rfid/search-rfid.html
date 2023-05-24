@@ -1,42 +1,18 @@
 {% extends "base.html" %}
 
-
-
 {% block body_block %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
 <br>
 
 <div class="container fluid">
-  <form
-      class="form my-2 my-lg-0"
-      method="GET"
-      action="{% url 'rfid:search' unique_id=esp_detail.unique_id %}">
-      <div class="input-group">
-      
-
-        <input
-          class="form-control"
-          type="search"
-          name="q"
-          placeholder="Search"
-          aria-label="Search"
-          value="{{ request.GET.q }}"
-        />
-        <span class="insert-group-btn">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </span>
-      </div>
-    </form>
-
+  
+<a href='{% url "rfid:detail-esp" esp_name=esp_detail.unique_id %}'><button class="btn btn-primary">Back to Event</button></a>
+<br>
 <b>Unique ID of Event : </b>{{ esp_detail.unique_id }}<br>
 <b>Created by : </b>{{ esp_detail.user.username }}<br>
 <br>
-<form method="POST" action="{% url 'rfid:detail-esp' esp_name=esp_detail.unique_id %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" class="btn btn-info" value="submit" name="submit">
-</form>
+
 <br>
 <b>RFID list :</b><br>
 
@@ -57,7 +33,7 @@
           </tr>
         </thead>
         <tbody>
-            {% for i in esp_detail.rfids.all %}
+            {% for i in rfids %}
           <tr>
             <th scope="row">{{i.pk}}</th>
             <td>{{i.esp.unique_id}}</td>
@@ -72,15 +48,6 @@
         </tbody>
       </table>
 </div>
-<div class="container md-6 xl-12 sm-3" >
-  <a href="{% url "rfid:delete-esp" esp_name=esp_detail.unique_id %}"> <button class="btn btn-danger">Delete ESP</button></a>
-</div>
-
-
-
-
-
-
 
 
 
