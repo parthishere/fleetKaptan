@@ -101,9 +101,10 @@ def delete_rfid(request, unique_id=None, pk=None):
   
     if user == esp_instance.user and rfid_instance in esp_instance.rfids.all():
         rfid_instance.delete()
-        return redirect("rfid:esp-list")
+        return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":unique_id}))
     
-    return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":unique_id}))
+    return redirect("rfid:esp-list")
+    
 
 
 @login_required
