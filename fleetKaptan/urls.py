@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
+from rfid.views import list_esps
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +34,7 @@ urlpatterns = [
     ), name="social-docs"),
     
     # path('api/auth/', include('dj_rest_auth.urls')),
+    path("", list_esps),
     path("rfid/", include("rfid.urls", namespace="rfid")),
     path("api/rfid/", include("rfid.api.urls")),
     # path("api//", include("recognizer.api.urls")),
