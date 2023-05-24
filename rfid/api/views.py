@@ -83,8 +83,6 @@ def get_posted_data_from_esp(request, unique_id, username):
     form = SaveForm(request.POST)
     form.is_valid()
     
-    # unique_id = request.query_params.get('uqid').strip()
-    # username = request.query_params.get('username').strip()
     
     unique_id.replace(" ", "")
     uqid = ""
@@ -105,11 +103,12 @@ def get_posted_data_from_esp(request, unique_id, username):
     D0 = form.cleaned_data.get('D0')
     data = form.cleaned_data.get('data')
     uid = form.cleaned_data.get('uid')
+    
     print(D0, data, uqid, username)
     try:
         esp = Esp32.objects.get(user__username=username, unique_id=uqid)
         print(esp)
-        rfid = RFID.objects.create(esp=esp, boolean_val=True if D0 else False, value=data, uid=uid)
+        rfid = RFID.objects.create(esp=esp, boolean_val=True if D0 else False, value=data, uid=uid, sent_from_server=False)
         # rfids = RFID.objects.filter(esp=esp).order_by("-id")
         rfid = RFIDsSerializer(rfid).data
         # print(rfids)

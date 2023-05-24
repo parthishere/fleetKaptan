@@ -6,6 +6,9 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
 <br>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 <div class="container fluid">
   <form
@@ -48,7 +51,7 @@
 
           <tr>
             <th scope="col">id</th>
-            <th scope="col">esp uquid</th>
+            <th scope="col">Sent from server</th>
             <th scope="col">Unique Id</th>
             <th scope="col">value</th>
             <th scope="col">timestamp</th>
@@ -60,7 +63,7 @@
             {% for i in esp_detail.rfids.all %}
           <tr>
             <th scope="row">{{i.pk}}</th>
-            <td>{{i.esp.unique_id}}</td>
+            <td>{% if i.sent_from_server %}<i class='fa fa-sign-in' style="font-size:36px;color:green"></i>{% else %} <i class='fa fa-sign-out' style="font-size:36px;color:blue"> {%endif%}</td>
             <td>{{i.uid}}</td>
             <td>{{i.value}}</td>
             <td>{{i.timestamp}}</td>

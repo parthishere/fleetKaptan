@@ -68,6 +68,7 @@ class RFID(models.Model):
     uid = models.CharField(default='id', max_length=120)
     value = models.TextField()
     timestamp = models.DateTimeField(auto_now=True)
+    sent_from_server=models.BooleanField(default=True)
     
     def __str__(self):
         return str(f"applience of {self.esp.unique_id} : {self.pk}")

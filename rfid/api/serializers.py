@@ -10,5 +10,5 @@ class Esp32Serializer(serializers.ModelSerializer):
 class RFIDsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RFID
-        fields = ("id", "esp", "uid", "value", "timestamp")
+        fields = ("id", "esp", "uid", "value", "timestamp", "sent_from_server")
         depth = 1
