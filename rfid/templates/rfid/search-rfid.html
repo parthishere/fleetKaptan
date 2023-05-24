@@ -7,7 +7,7 @@
 
 <div class="container fluid">
   
-<a href='{% url "rfid:detail-esp" esp_name=esp_detail.unique_id %}'><button class="btn btn-primary">Back to Event</button></a>
+<a href='{% url "rfid:detail-esp" esp_name=esp_detail.unique_id %}'><button class="btn btn-primary">Back to ESP</button></a>
 <br>
 <b>Unique ID of Event : </b>{{ esp_detail.unique_id }}<br>
 <b>Created by : </b>{{ esp_detail.user.username }}<br>
@@ -24,7 +24,7 @@
 
           <tr>
             <th scope="col">id</th>
-            <th scope="col">esp uquid</th>
+            <th scope="col">Sent from server</th>
             <th scope="col">Unique Id</th>
             <th scope="col">value</th>
             <th scope="col">timestamp</th>
@@ -36,7 +36,7 @@
             {% for i in rfids %}
           <tr>
             <th scope="row">{{i.pk}}</th>
-            <td>{{i.esp.unique_id}}</td>
+            <td>{% if i.sent_from_server %}<i class='fa fa-sign-out' style="font-size:36px;color:green"></i>{% else %} <i class='fa fa-sign-in' style="font-size:36px;color:blue"> {%endif%}</td>
             <td>{{i.uid}}</td>
             <td>{{i.value}}</td>
             <td>{{i.timestamp}}</td>
