@@ -63,7 +63,7 @@
             {% for i in esp_detail.rfids.all %}
           <tr>
             <th scope="row">{{i.pk}}</th>
-            <td>{% if i.sent_from_server %}<i class='fa fa-sign-in' style="font-size:36px;color:green"></i>{% else %} <i class='fa fa-sign-out' style="font-size:36px;color:blue"> {%endif%}</td>
+            <td>{% if i.sent_from_server %}<i class='fa fa-sign-out' style="font-size:36px;color:green"></i>{% else %} <i class='fa fa-sign-in' style="font-size:36px;color:blue"> {%endif%}</td>
             <td>{{i.uid}}</td>
             <td>{{i.value}}</td>
             <td>{{i.timestamp}}</td>
