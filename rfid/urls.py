@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import home, list_esps, detail_esp, create_esp, update_esp, delete_esp, delete_rfid
+from .views import home, list_esps, detail_esp, create_esp, update_esp, delete_esp, delete_rfid, search_rfid
 
 
 app_name = "rfid"
@@ -12,4 +12,5 @@ urlpatterns = [
     path("esp/<str:esp_name>/update",update_esp,name="update-esp"),
     path("esp/<str:esp_name>/delete",delete_esp,name="delete-esp"),
     path("rfid/<str:unique_id>/<int:pk>/delete",delete_rfid,name="delete-rfid"),
+    path("rfid/<str:unique_id>/search",search_rfid,name="search"),
 ]

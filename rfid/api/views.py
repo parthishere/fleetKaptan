@@ -101,7 +101,7 @@ def get_posted_data_from_esp(request, unique_id, username):
         else:
             usrname += b
     
-    password = form.cleaned_data.get('password')
+    
     D0 = form.cleaned_data.get('D0')
     data = form.cleaned_data.get('data')
     uid = form.cleaned_data.get('uid')

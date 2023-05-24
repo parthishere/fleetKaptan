@@ -104,3 +104,7 @@ def delete_rfid(request, unique_id=None, pk=None):
     
     return redirect(reverse("rfid:detail-esp", kwargs={"esp_name":unique_id}))
 
+
+def search_rfid(request, uniqe_id=None):
+    return render(request, "", {})
+
